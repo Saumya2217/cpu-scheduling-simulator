@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CPU Scheduling Simulator - SJF, SRTF and BJF</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>CPU Scheduling Simulator</h1>
+    <span class="subtitle">SJF (non-preemptive) · SRTF (preemptive) · Preemptive BJF with dynamic fitness [1]</span>
+  </header>
+
+  <main class="layout">
+    <!-- ============ LEFT: input, algorithm choice, run ============ -->
+    <aside class="panel-left">
+      <section class="box">
+        <h2><span class="step">1</span>Enter processes</h2>
+        <form id="add-form" class="entry-row" autocomplete="off">
+          <label>PID<input id="in-pid" type="text" maxlength="8"></label>
+          <label>Arrival (ms)<input id="in-arrival" type="text" inputmode="numeric"></label>
+          <label>Burst (ms)<input id="in-burst" type="text" inputmode="numeric"></label>
+          <label>Priority<input id="in-priority" type="text" inputmode="numeric" value="1" title="1 = most urgent. Used by BJF only."></label>
+          <button type="submit" class="btn">Add</button>
+        </form>
+        <p class="hint">Priority (1 = most urgent, 10 = least) is used by BJF only.</p>
+        <div class="table-wrap input-table">
+          <table>
+            <thead><tr><th>PID</th><th>Arrival</th><th>Burst</th><th>Priority</th></tr></thead>
+            <tbody id="process-rows"></tbody>
+          </table>
+        </div>
+        <div class="button-grid">
+          <button id="btn-remove" class="btn">Remove</button>
+          <button id="btn-clear" class="btn">Clear all</button>
+          <button id="btn-random" class="btn">Random</button>
+          <select id="sample-select" aria-label="Sample process sets"></select>
+          <button id="btn-sample" class="btn">Load sample</button>
+          <label class="btn file-btn">Open CSV…<input id="csv-input" type="file" accept=".csv,text/csv"></label>
+        </div>
+      </section>
+
+      <section class="box">
+        <h2><span class="step">2</span>Select algorithm</h2>
+        <label class="radio"><input type="radio" name="algo" value="SJF" checked> SJF – non-preemptive</label>
+        <label class="radio"><input type="radio" name="algo" value="SRTF"> SRTF – preemptive</label>
+        <label class="radio"><input type="radio" name="algo" value="BJF"> Preemptive BJF (dynamic fitness) [1]</label>
+        <label class="radio"><input type="radio" name="algo" value="ALL"> Compare all three</label>
+        <p class="formula">BJF: f = 0.33·priority + 0.33·arrival + 0.33·burst<br>(each min-max normalised; running process uses remaining burst; lowest f runs)</p>
+      </section>
+
+      <section class="box">
+        <h2><span class="step">3</span>Execute</h2>
+        <button id="btn-run" class="btn primary">Run Simulation</button>
+        <button id="btn-reset" class="btn wide">Reset results</button>
+      </section>
+    </aside>
+
+    <!-- ============ RIGHT: results ============ -->
+    <section class="panel-right">
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="exec" role="tab">Execution</button>
+        <button class="tab" data-tab="compare" role="tab">Compare</button>
+        <button class="tab" data-tab="log" role="tab">Event log</button>
+      </nav>
+
+      <div id="tab-exec" class="tab-body active">
+        <h3 id="exec-title">Results appear here after you press Run Simulation.</h3>
+        <div id="exec-gantt" class="gantt-holder"><div class="placeholder">Gantt chart will appear here</div></div>
+        <div class="table-wrap">
+          <table id="result-table">
+            <thead><tr id="result-head"></tr></thead>
+            <tbody id="result-rows"></tbody>
+          </table>
+        </div>
+        <div id="cards" class="cards"></div>
+      </div>
+
+      <div id="tab-compare" class="tab-body">
+        <div id="compare-gantts"></div>
+        <div id="compare-chart" class="chart"></div>
+        <div class="table-wrap">
+          <table id="compare-table">
+            <thead><tr><th class="left">Performance parameter</th><th>SJF</th><th>SRTF</th><th>BJF</th><th>Best</th></tr></thead>
+            <tbody id="compare-rows"></tbody>
+          </table>
+        </div>
+        <p id="observation" class="observation"></p>
+      </div>
+
+      <div id="tab-log" class="tab-body">
+        <pre id="event-log" class="log">Run a simulation to see every scheduling decision here.</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer id="status" class="status">Add processes (or load a sample), choose an algorithm and press Run Simulation.</footer>
+
+  <!-- Scheduling core (also used by the Node terminal version and the tests) -->
+  <script src="src/validation.js"></script>
+  <script src="src/csv.js"></script>
+  <script src="src/algorithms.js"></script>
+  <script src="src/metrics.js"></script>
+  <script src="src/formatting.js"></script>
+  <script src="src/samples.js"></script>
+  <!-- Browser-only code: reads the page and draws the results -->
+  <script src="src/app.js"></script>
+</body>
+</html>

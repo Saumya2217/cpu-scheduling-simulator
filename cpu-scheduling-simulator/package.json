@@ -1,0 +1,14 @@
+{
+  "name": "cpu-scheduling-simulator",
+  "version": "1.0.0",
+  "description": "SJF, SRTF and preemptive Best-Job-First (dynamic fitness) CPU scheduling simulator - OS Self-Learning Activity",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "demo": "node cli.js --sample review1",
+    "paper": "node cli.js --sample paperTable1 --algo bjf"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
