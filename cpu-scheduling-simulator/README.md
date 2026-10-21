@@ -14,6 +14,8 @@ Simulates three CPU scheduling algorithms on the same set of processes and compa
 
 ## Run
 
+**Live demo:** [Open CPU Scheduling Simulator](https://cpu-scheduling-simulator-bay.vercel.app).
+
 **GUI** – open `index.html` in any modern browser (Chrome, Edge, Firefox). No installation, no internet needed.
 
 **Terminal and tests** – need Node.js 18 or newer:
